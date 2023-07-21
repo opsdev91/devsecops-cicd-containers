@@ -1,7 +1,3 @@
-provider "aws" {
-  region = "ap-southeast-1"
-}
-
 resource "aws_instance" "web" {
   ami                    = data.aws_ami.ubuntu.id
   instance_type          = "t2.small"
@@ -30,20 +26,6 @@ resource "aws_key_pair" "ec2" {
   key_name   = "ec2"
   public_key = file("${path.module}/../.ssh/id_rsa.pub")
 }
-data "aws_ami" "ubuntu" {
-  most_recent = true
-
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/*ubuntu-jammy-22.04-amd64-server-*"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-}
-
 
 resource "aws_security_group" "sg" {
   vpc_id = "vpc-038139570a16495c7"
@@ -60,7 +42,4 @@ resource "aws_security_group" "sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-}
-output "ec2-instance-ip" {
-  value = aws_instance.web.*.public_ip
 }
