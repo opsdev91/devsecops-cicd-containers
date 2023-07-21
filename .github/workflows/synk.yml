@@ -17,9 +17,9 @@ jobs:
       with:
         node-version: 16
 
-    - name: Install snyk
-      run: |
-        npm install -g snyk
+    # - name: Install snyk
+    #   run: |
+    #     npm install -g snyk
   build:
     runs-on: self-hosted
     needs: [install]
