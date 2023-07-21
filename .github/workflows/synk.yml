@@ -51,7 +51,7 @@ jobs:
       run: echo "id=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_OUTPUT
       id: commit_id
     - name: Transfer body
-      run: >
+      run: |
         jq "{ \"messageType\": \"CodeScanReport\", \"reportType\": \"SNYK\", \
         \"createdAt\": $(date +\"%Y-%m-%dT%H:%M:%S.%3NZ\"), \"source_repository\": ${GITHUB_REPOSITORY#*/}, \
         \"source_branch\": ${{ steps.extract_branch.outputs.branch }}, \
