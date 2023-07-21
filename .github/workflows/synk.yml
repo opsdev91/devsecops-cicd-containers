@@ -32,7 +32,7 @@ jobs:
       with:
         node-version: 16
     - name: get branch
-      run: echo ${GITHUB_REF#refs/heads/})
+      run: echo ${GITHUB_REF#refs/heads/}
     # - name: Login ECR
     #   run: >
     #     aws ecr-public get-login-password --region us-east-1 | 
