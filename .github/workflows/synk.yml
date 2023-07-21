@@ -34,7 +34,7 @@ jobs:
 
     - name: Login ECR
       shell: bash
-      run: aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/z6c0g1m6
+      run: whoami
 
     - name: Build the Docker image
       run: docker build .  --tag ${{ secrets.DOCKER_REPO }}/devsecops:${{ vars.MAJOR }}.${{ vars.MINOR }}
