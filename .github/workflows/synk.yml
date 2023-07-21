@@ -4,10 +4,8 @@ name: Git Secrets
 on: [workflow_call]
 
 jobs:
-  build:
-
+  install:
     runs-on: self-hosted
-
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -22,3 +20,38 @@ jobs:
     - name: Install snyk
       run: |
         npm install -g snyk
+  build:
+    runs-on: self-hosted
+    needs: [install]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        repository: awslabs/git-secrets
+
+    - name: Use Node.js 
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16
+
+    # - name: Login ECR
+    #   run: >
+    #     aws ecr-public get-login-password --region us-east-1 | 
+    #     docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin ${{ secrets.DOCKER_REPO }}
+
+    # - name: Build the Docker image
+    #   run: docker build .  --tag ${{ secrets.DOCKER_REPO }}/devsecops:${{ vars.MAJOR }}.${{ vars.MINOR }}
+
+    # - name: Snyk config
+    #   run: snyk config set api=${{ secrets.SNYK_API_SECRET }}
+
+    # - name: Scan the image
+    #   run: >
+    #     snyk container test ${{ secrets.DOCKER_REPO }}/devsecops:${{ vars.MAJOR }}.${{ vars.MINOR }}
+    #     --file=Dockerfile --json --severity-threshold=high > snyk-results.json
+
+    - name: Set the variable
+      run: echo ${GITHUB_REPOSITORY#*/} 
+      
+    # - name: Push to DockerHub
+    #   run: docker push ${{ secrets.DOCKER_REPO }}/devsecops:${{ vars.MAJOR }}.${{ vars.MINOR }}
