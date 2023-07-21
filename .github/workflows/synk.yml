@@ -48,7 +48,9 @@ jobs:
 
     - name: Increasement version
       id: increasement
-      run: echo "version=$((${{ vars.MINOR }}+1))" >> $GITHUB_OUTPUT
+      run: |
+        version=$((${{ vars.MINOR }}+1))
+        echo "version=$version" >> $GITHUB_OUTPUT
     - name: echo
       run: echo ${{ steps.increasement.output.version }}
     # - name: login github
