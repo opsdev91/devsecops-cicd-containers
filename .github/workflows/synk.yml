@@ -53,7 +53,7 @@ jobs:
         value: ${{ vars.MINOR }} + 1
 
     - name: login github
-      run: echo ${GITHUB_TOKEN} | gh auth login --with-token
+      run:  echo ${{ secrets.GITHUB_TOKEN }} | gh auth login --with-token
     - name: Set the variable
       run: gh variable set MINOR ${{ steps.increasement.output.version }} 
 
