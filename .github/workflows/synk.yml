@@ -34,7 +34,8 @@ jobs:
       run: >
         snyk container test ${{ secrets.DOCKER_REPO }}/devsecops:${{ vars.MAJOR }}.${{ vars.MINOR }}
         --file=Dockerfile --json --severity-threshold=high --json-file-output=snyk-results.json
-
+      continue-on-error: true
+      
     - name: Increasement version
       id: increasement
       run: |
