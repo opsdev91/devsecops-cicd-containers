@@ -7,5 +7,5 @@ jobs:
   #   uses: ./.github/workflows/git-secrets.yml
   snyk:
     # needs: [git-secrets]
-    uses: "./.github/workflows/synk.yml"
+    uses: ./.github/workflows/synk.yml
   
