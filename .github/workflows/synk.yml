@@ -31,9 +31,10 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: 16
-
-    - name: Login ECR
-      run: aws ecr-public get-login-password --region us-east-1 | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin ${{ secrets.DOCKER_REPO }}
+    - name: test
+      run: gh secret list
+    # - name: Login ECR
+    #   run: aws ecr-public get-login-password --region us-east-1 | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin ${{ secrets.DOCKER_REPO }}
   #   - name: Build the Docker image
   #     run: docker build .  --tag ${{ vars.DOCKER_REPO }}/devsecops:${{ vars.MAJOR }}.${{ vars.MINOR }}
 
@@ -45,13 +46,13 @@ jobs:
   #       snyk container test ${{ secrets.DOCKER_REPO }}/devsecops:${{ vars.MAJOR }}.${{ vars.MINOR }}
   #       --file=Dockerfile --json --severity-threshold=high > snyk-results.json
 
-    - name: Increasement version
-      id: increasement
-      run: |
-        version=$((${{ vars.MINOR }}+1))
-        echo "version=$version" >> $GITHUB_OUTPUT
-    - name: Set the variable
-      run: gh variable set MINOR -b ${{ steps.increasement.outputs.version }}
+    # - name: Increasement version
+    #   id: increasement
+    #   run: |
+    #     version=$((${{ vars.MINOR }}+1))
+    #     echo "version=$version" >> $GITHUB_OUTPUT
+    # - name: Set the variable
+    #   run: gh variable set MINOR -b ${{ steps.increasement.outputs.version }}
 
   # post_build:
   #   runs-on: self-hosted
