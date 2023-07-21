@@ -54,7 +54,7 @@ jobs:
       run:  echo ${{ secrets.TOKEN_GITHUB }} | gh auth login --with-token
 
     - name: Set the variable
-      run: gh variable set MINOR ${{ steps.increasement.output.version }} -R ${GITHUB_REPOSITORY#*/} 
+      run: gh variable set MINOR ${{ steps.increasement.output.version }}
 
     # - name: Set the variable
     #   run: echo ${{ github.token }} 
