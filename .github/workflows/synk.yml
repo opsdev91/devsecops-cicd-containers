@@ -31,13 +31,13 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: 16
-        
+
     - name: Run with administrator permission
       run:  echo ${{ github.token }} | gh auth login --with-token
 
     - name: test
       env:
-        SUPER_SECRET: ${{ secrets.DOCKER_USERNAME }}
+        SUPER_SECRET: ${{ secrets.SECRET_TOKEN }}
       run: |
         echo "$SUPER_SECRET"
   #   - name: Login ECR
