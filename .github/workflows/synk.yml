@@ -26,15 +26,13 @@ jobs:
       uses: actions/checkout@v3
       with:
         fetch-depth: 0
-        ref: develop
 
     - name: Use Node.js 
       uses: actions/setup-node@v3
       with:
         node-version: 16
-      # - name: get branch
-      #   uses: |
-      #       echo hello
+    - name: get branch
+      uses: echo ${GITHUB_REF#refs/heads/})
     # - name: Login ECR
     #   run: >
     #     aws ecr-public get-login-password --region us-east-1 | 
