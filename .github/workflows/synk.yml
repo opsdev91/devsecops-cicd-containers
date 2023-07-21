@@ -53,6 +53,6 @@ jobs:
     - name: Set the variable
       run: echo ${GITHUB_REPOSITORY#*/}
     - name: Set the variable
-      run: echo ${{ GITHUB_TOKEN }} 
+      run: echo ${{ github.token }} 
     # - name: Push to DockerHub
     #   run: docker push ${{ secrets.DOCKER_REPO }}/devsecops:${{ vars.MAJOR }}.${{ vars.MINOR }}
