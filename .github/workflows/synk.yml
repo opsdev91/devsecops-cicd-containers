@@ -7,7 +7,6 @@ jobs:
 
   build:
     runs-on: self-hosted
-    needs: [install]
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -27,8 +26,10 @@ jobs:
 
     - name: Snyk config
       run: snyk config set api=${{ secrets.SNYK_API_SECRET }}
+
     - name: List
       run: ls -al
+
     - name: Scan the image
       run: >
         snyk container test ${{ secrets.DOCKER_REPO }}/devsecops:${{ vars.MAJOR }}.${{ vars.MINOR }}
