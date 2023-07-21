@@ -50,6 +50,7 @@ jobs:
       id: increasement
       run: |
         version=$((${{ vars.MINOR }}+1))
+        echo $version
         echo "version=$version" >> $GITHUB_OUTPUT
     - name: echo
       run: echo ${{ steps.increasement.output.version }}
