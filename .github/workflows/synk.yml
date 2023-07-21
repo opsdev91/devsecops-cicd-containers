@@ -34,7 +34,7 @@ jobs:
           node-version: 16
       - name: get branch
         uses: |
-            echo "branch=$(echo ${GITHUB_REF#refs/heads/})"
+            echo hello
     # - name: Login ECR
     #   run: >
     #     aws ecr-public get-login-password --region us-east-1 | 
