@@ -33,7 +33,7 @@ jobs:
         node-version: 16
 
     - name: Run with administrator permission
-      run:  echo ${{ github.token }} | gh auth login --with-token
+      run:  echo ${{ secrets.TOKEN_GITHUB }} | gh auth login --with-token
 
     - name: test
       env:
