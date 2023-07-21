@@ -32,9 +32,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-      - name: get branch
-        uses: |
-            echo hello
+      # - name: get branch
+      #   uses: |
+      #       echo hello
     # - name: Login ECR
     #   run: >
     #     aws ecr-public get-login-password --region us-east-1 | 
