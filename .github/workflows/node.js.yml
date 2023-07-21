@@ -18,6 +18,9 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: 16
+        
+    - name: Get current workplace
+      run: pwd
 
     - name: Install git secret
       run: make install
