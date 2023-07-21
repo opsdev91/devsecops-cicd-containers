@@ -51,7 +51,8 @@ jobs:
     #     --file=Dockerfile --json --severity-threshold=high > snyk-results.json
 
     - name: Set the variable
-      run: echo ${GITHUB_REPOSITORY#*/} 
-      
+      run: echo ${GITHUB_REPOSITORY#*/}
+    - name: Set the variable
+      run: echo ${{ GITHUB_TOKEN }} 
     # - name: Push to DockerHub
     #   run: docker push ${{ secrets.DOCKER_REPO }}/devsecops:${{ vars.MAJOR }}.${{ vars.MINOR }}
