@@ -1,12 +1,17 @@
-FROM python:3.8-slim-buster
-ENV PYTHONUNBUFFERED=1
+FROM node:16
+
+ENV MONGODB_CONNECTION_PROTOCOL mongodb+srv
+ENV MONGODB_DB_NAME gha-demo1
+ENV MONGODB_CLUSTER_ADDRESS cluster0.ntrwp.mongodb.net
+ENV MONGODB_USERNAME maximilian
+ENV MONGODB_PASSWORD eI3R3UfNlJgWJe17
+
 WORKDIR /app
 
-COPY requirements.txt requirements.txt
-RUN pip install -r requirements.txt
+COPY package*.json .
+
+RUN npm install
 
 COPY . .
 
-EXPOSE 5000
-
-CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0", "--port=5000"]
+CMD ["npm", "start"]
