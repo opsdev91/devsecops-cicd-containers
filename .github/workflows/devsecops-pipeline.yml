@@ -8,4 +8,4 @@ jobs:
   snyk:
     # needs: [git-secrets]
     uses: ./.github/workflows/synk.yml
-  
+    secrets: inherit
