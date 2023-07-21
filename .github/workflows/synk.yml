@@ -22,18 +22,18 @@ jobs:
     runs-on: self-hosted
     # needs: [install]
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-    - name: Use Node.js 
-      uses: actions/setup-node@v3
-      with:
-        node-version: 16
-    - name: get branch
-      uses: |
-          echo "branch=$(echo ${GITHUB_REF#refs/heads/})"
+      - name: Use Node.js 
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: get branch
+        uses: |
+            echo "branch=$(echo ${GITHUB_REF#refs/heads/})"
     # - name: Login ECR
     #   run: >
     #     aws ecr-public get-login-password --region us-east-1 | 

@@ -6,6 +6,6 @@ jobs:
   # git-secrets:
   #   uses: ./.github/workflows/git-secrets.yml
   snyk:
-    name: deploy
     # needs: [git-secrets]
     uses: "./.github/workflows/synk.yml"
+  
