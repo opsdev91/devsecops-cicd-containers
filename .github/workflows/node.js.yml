@@ -35,6 +35,6 @@ jobs:
 
     - name: Run git-secrets
       run: |
-          - git secrets --install
-          - git secrets --register-aws
-          - git secrets --scan --recursive
+          git secrets --install
+          git secrets --register-aws
+          git secrets --scan --recursive
