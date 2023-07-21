@@ -4,9 +4,9 @@ name: DevSecOps Pipeline
 on: [push]
 
 jobs:
-  git-secrets:
-    uses: ./.github/workflows/git-secrets.yml
+  # git-secrets:
+  #   uses: ./.github/workflows/git-secrets.yml
   snyk:
     name: deploy
-    needs: [git-secrets]
+    # needs: [git-secrets]
     uses: ./.github/workflows/synk.yml

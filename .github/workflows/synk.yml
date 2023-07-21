@@ -9,8 +9,6 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-      with:
-        repository: awslabs/git-secrets
 
     - name: Use Node.js 
       uses: actions/setup-node@v3
@@ -26,8 +24,6 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-      with:
-        repository: awslabs/git-secrets
 
     - name: Use Node.js 
       uses: actions/setup-node@v3
@@ -49,6 +45,7 @@ jobs:
     #   run: >
     #     snyk container test ${{ secrets.DOCKER_REPO }}/devsecops:${{ vars.MAJOR }}.${{ vars.MINOR }}
     #     --file=Dockerfile --json --severity-threshold=high > snyk-results.json
+    
     - name: Increasement version
       id: increasement
       run: echo "version=$(echo $({{ MINOR }} + 1))" >> $GITHUB_OUTPUT
