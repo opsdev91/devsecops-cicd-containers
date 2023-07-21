@@ -29,7 +29,8 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: 16
-
+    - name: get branch
+      uses: echo ${{ github.head_ref }}.${{ github.sha }}
     # - name: Login ECR
     #   run: >
     #     aws ecr-public get-login-password --region us-east-1 | 
@@ -46,19 +47,49 @@ jobs:
     #     snyk container test ${{ secrets.DOCKER_REPO }}/devsecops:${{ vars.MAJOR }}.${{ vars.MINOR }}
     #     --file=Dockerfile --json --severity-threshold=high > snyk-results.json
 
-    - name: Increasement version
-      id: increasement
-      run: |
-        version=$((${{ vars.MINOR }}+1))
-        echo "version=$version" >> $GITHUB_OUTPUT
-
-    # - name: login github
-    #   run:  echo ${{ secrets.TOKEN_GITHUB }} | gh auth login --with-token
-
-    - name: Set the variable
-      run: gh variable set MINOR -b ${{ steps.increasement.outputs.version }}
+    # - name: Increasement version
+    #   id: increasement
+    #   run: |
+    #     version=$((${{ vars.MINOR }}+1))
+    #     echo "version=$version" >> $GITHUB_OUTPUT
 
     # - name: Set the variable
-    #   run: echo ${{ github.token }} 
-    # - name: Push to DockerHub
-    #   run: docker push ${{ secrets.DOCKER_REPO }}/devsecops:${{ vars.MAJOR }}.${{ vars.MINOR }}
+    #   run: gh variable set MINOR -b ${{ steps.increasement.outputs.version }}
+
+  # post_build:
+  #   runs-on: self-hosted
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+
+  #     - name: Use Node.js 
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: 16
+
+  #     - name: Extract branch name
+  #       shell: bash
+  #       run: echo "branch=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_OUTPUT
+  #       id: extract_branch
+
+  #     - name: Transfer body
+  #       run: >
+  #         jq "{ \"messageType\": \"CodeScanReport\", \"reportType\": \"SNYK\", \
+  #         \"createdAt\": $(date +\"%Y-%m-%dT%H:%M:%S.%3NZ\"), \"source_repository\": ${GITHUB_REPOSITORY#*/}, \
+  #         \"source_branch\": ${{ steps.extract_branch.outputs.branch }}, 
+  #         \"source_commitid\": env.CODEBUILD_RESOLVED_SOURCE_VERSION, \
+  #         \"report\": . }" snyk-results.json > payload.json
+
+  #     - name: Check condition
+  #       run: |
+  #         if (grep -E 'high|critical' payload.json); then 
+  #           aws lambda invoke --function-name security-hub-lambda --payload file://payload.json snyk-results.json && echo "LAMBDA_SUCCEDED" || echo "LAMBDA_FAILED";
+  #           echo "There are critical or high vulnerabilities.. failing the build"
+  #           docker push ${{ secrets.DOCKER_REPO }}/devsecops:${{ vars.MAJOR }}.${{ vars.MINOR }}
+  #           exit 1;
+  #         elif (grep -E 'medium|low' payload.json); then
+  #           aws lambda invoke --function-name security-hub-lambda --payload file://payload.json snyk-results.json && echo "LAMBDA_SUCCEDED" || echo "LAMBDA_FAILED";
+  #           docker push ${{ secrets.DOCKER_REPO }}/devsecops:${{ vars.MAJOR }}.${{ vars.MINOR }}
+  #         fi
+  #         printf '[{"name":"hello-k8s","imageUri":"%s"}]' $REPOSITORY_URI:$TAG > build.json
+

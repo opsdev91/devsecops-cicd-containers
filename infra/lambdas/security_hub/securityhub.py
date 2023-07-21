@@ -14,7 +14,7 @@ securityhub = boto3.client('securityhub')
 
 # This function import agregated report findings to securityhub 
 def import_finding_to_sh(count: int, account_id: str, region: str, created_at: str, source_repository: str, 
-    source_branch: str, source_commitid: str, build_id: str, report_url: str, finding_id: str, generator_id: str,
+    source_branch: str, source_commitid: str, report_url: str, finding_id: str, generator_id: str,
                          normalized_severity: str, severity: str, finding_type: str, finding_title: str, finding_description: str, best_practices_cfn: str): 
     print("called securityhub.py..................")
     new_findings = []
@@ -45,7 +45,6 @@ def import_finding_to_sh(count: int, account_id: str, region: str, created_at: s
         'SourceUrl': report_url,
         'Resources': [
             {
-                'Id': build_id,
                 'Type': "CodeBuild",
                 'Partition': "aws",
                 'Region': region

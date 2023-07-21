@@ -33,7 +33,6 @@ def process_message(event):
         source_repository = event['source_repository']
         source_branch = event['source_branch']
         source_commitid = event['source_commitid']
-        build_id = event['build_id']
         report_type = event['reportType']
         finding_type = FINDING_TYPE_TEMPLATE.format(report_type)
         generator_id = f"{report_type.lower()}-{source_repository}-{source_branch}"
@@ -41,7 +40,7 @@ def process_message(event):
         ##upload to S3 bucket.
         s3 = boto3.client('s3')
         s3bucket = "pipeline-artifact-bucket-" + account_id
-        key = f"reports/{event['reportType']}/{build_id}-{created_at}.json"
+        key = f"reports/{event['reportType']}/{created_at}.json"
         s3.put_object(Bucket=s3bucket, Body=json.dumps(event), Key=key, ServerSideEncryption='aws:kms')
         report_url = f"https://s3.console.aws.amazon.com/s3/object/{s3bucket}/{key}?region={region}"
 
@@ -59,10 +58,10 @@ def process_message(event):
                 if severity not in ['Negligible', 'Unknown', 'INFORMATIONAL']:
                     normalized_severity =  assign_normalized_severity(severity)
                     finding_description = f"{count}---Name:{name}---Sevierity:{severity}---URL:{url}"
-                    finding_id = f"{count}-{report_type.lower()}-{build_id}"
+                    finding_id = f"{count}-{report_type.lower()}"
                     created_at = datetime.now(timezone.utc).isoformat()
                     count += 1
-                    securityhub.import_finding_to_sh(count, account_id, region, created_at, source_repository, source_branch, source_commitid, build_id, report_url, finding_id, generator_id, normalized_severity, severity, finding_type, FINDING_TITLE, finding_description, BEST_PRACTICES_CFN)               
+                    securityhub.import_finding_to_sh(count, account_id, region, created_at, source_repository, source_branch, source_commitid, report_url, finding_id, generator_id, normalized_severity, severity, finding_type, FINDING_TITLE, finding_description, BEST_PRACTICES_CFN)               
                     
         elif ( event['reportType'] == 'SNYK' ):
             FINDING_TITLE = "Snyk StaticCode Analysis" 
@@ -83,10 +82,10 @@ def process_message(event):
                     if severity not in ['Negligible', 'Unknown']:
                         normalized_severity =  assign_normalized_severity(severity)
                         finding_description = f"{count}---Title:{title}---Package:{packageName}---Sevierity:{severity}---CVSSv3_Score:{cvssScore}"
-                        finding_id = f"{count}-{report_type.lower()}-{build_id}"
+                        finding_id = f"{count}-{report_type.lower()}"
                         created_at = datetime.now(timezone.utc).isoformat()
                         count += 1
-                        securityhub.import_finding_to_sh(count, account_id, region, created_at, source_repository, source_branch, source_commitid, build_id, report_url, finding_id, generator_id, normalized_severity, severity, finding_type, FINDING_TITLE, finding_description, BEST_PRACTICES_CFN)               
+                        securityhub.import_finding_to_sh(count, account_id, region, created_at, source_repository, source_branch, source_commitid, report_url, finding_id, generator_id, normalized_severity, severity, finding_type, FINDING_TITLE, finding_description, BEST_PRACTICES_CFN)               
 
         elif ( event['reportType'] == 'ANCHORE' ): 
             FINDING_TITLE = "Anchore StaticCode Analysis" 
@@ -105,10 +104,10 @@ def process_message(event):
                     normalized_severity =  assign_normalized_severity(severity)
                     finding_description = f"{count}---Package:{package}--- Vulnerability:{vuln}---Details:{url}"
                     print(f"finding description is: {finding_description}")
-                    finding_id = f"{count}-{report_type.lower()}-{build_id}"
+                    finding_id = f"{count}-{report_type.lower()}"
                     created_at = datetime.now(timezone.utc).isoformat()
                     count += 1
-                    securityhub.import_finding_to_sh(count, account_id, region, created_at, source_repository, source_branch, source_commitid, build_id, report_url, finding_id, generator_id, normalized_severity, severity, finding_type, FINDING_TITLE, finding_description, BEST_PRACTICES_CFN)               
+                    securityhub.import_finding_to_sh(count, account_id, region, created_at, source_repository, source_branch, source_commitid, report_url, finding_id, generator_id, normalized_severity, severity, finding_type, FINDING_TITLE, finding_description, BEST_PRACTICES_CFN)               
                
         elif event['reportType'] == 'OWASP-Zap':  
             severity = 50
@@ -122,9 +121,9 @@ def process_message(event):
                 normalized_severity =  assign_normalized_severity(severity)                                        
                 instances = len(event['report']['site'][0]['alerts'][alertno]['instances'])
                 finding_description = f"{alertno}-Vulerability:{event['report']['site'][0]['alerts'][alertno]['alert']}-Total occurances of this issue:{instances}"
-                finding_id = f"{alertno}-{report_type.lower()}-{build_id}"
+                finding_id = f"{alertno}-{report_type.lower()}"
                 created_at = datetime.now(timezone.utc).isoformat()
-                securityhub.import_finding_to_sh(alertno, account_id, region, created_at, source_repository, source_branch, source_commitid, build_id, report_url, finding_id, generator_id, normalized_severity, severity, finding_type, FINDING_TITLE, finding_description, BEST_PRACTICES_OWASP)
+                securityhub.import_finding_to_sh(alertno, account_id, region, created_at, source_repository, source_branch, source_commitid, report_url, finding_id, generator_id, normalized_severity, severity, finding_type, FINDING_TITLE, finding_description, BEST_PRACTICES_OWASP)
         else:
             print("Invalid report type was provided")        
         return vul_level        
