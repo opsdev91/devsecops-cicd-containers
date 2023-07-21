@@ -48,14 +48,13 @@ jobs:
 
     - name: Increasement version
       id: increasement
-      run: echo "version=$(echo ${{ env.value }})" >> $GITHUB_OUTPUT
-      env:
-        value: ${{ vars.MINOR }} + 1
+      run: echo "version=$(echo $((${{ vars.MINOR }}+1)))" >> $GITHUB_OUTPUT
 
     - name: login github
-      run:  echo ${{ secrets.GITHUB_TOKEN }} | gh auth login --with-token
+      run:  echo ${{ secrets.TOKEN_GITHUB }} | gh auth login --with-token
+
     - name: Set the variable
-      run: gh variable set MINOR ${{ steps.increasement.output.version }} 
+      run: gh variable set MINOR ${{ steps.increasement.output.version }} -R ${GITHUB_REPOSITORY#*/} 
 
     # - name: Set the variable
     #   run: echo ${{ github.token }} 
