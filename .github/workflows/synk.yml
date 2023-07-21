@@ -4,20 +4,7 @@ name: Git Secrets
 on: [workflow_call]
 
 jobs:
-  install:
-    runs-on: self-hosted
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
 
-    - name: Use Node.js 
-      uses: actions/setup-node@v3
-      with:
-        node-version: 16
-
-    - name: Install snyk
-      run: |
-        npm install -g snyk
   build:
     runs-on: self-hosted
     needs: [install]
@@ -40,11 +27,12 @@ jobs:
 
     - name: Snyk config
       run: snyk config set api=${{ secrets.SNYK_API_SECRET }}
-
+    - name: List
+      run: ls -al
     - name: Scan the image
       run: >
         snyk container test ${{ secrets.DOCKER_REPO }}/devsecops:${{ vars.MAJOR }}.${{ vars.MINOR }}
-        --file=Dockerfile --json --severity-threshold=high > snyk-results.json
+        --file=Dockerfile --json --severity-threshold=high --json-file-output=snyk-results.json
 
     - name: Increasement version
       id: increasement
