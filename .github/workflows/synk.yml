@@ -61,12 +61,12 @@ jobs:
     - name: Check condition
       run: |
         if (grep -E 'high|critical' payload.json); then 
-          aws lambda invoke --function-name security-hub-lambda --payload file://payload.json snyk-results.json && echo "LAMBDA_SUCCEDED" || echo "LAMBDA_FAILED";
+          aws lambda invoke --function-name security-hub-lambda --cli-binary-format raw-in-base64-out --payload file://payload.json snyk-results.json && echo "LAMBDA_SUCCEDED" || echo "LAMBDA_FAILED";
           echo "There are critical or high vulnerabilities.. failing the build"
           docker push ${{ secrets.DOCKER_REPO }}/devsecops:${{ vars.MAJOR }}.${{ vars.MINOR }}
           exit 1;
         elif (grep -E 'medium|low' payload.json); then
-          aws lambda invoke --function-name security-hub-lambda --payload file://payload.json snyk-results.json && echo "LAMBDA_SUCCEDED" || echo "LAMBDA_FAILED";
+          aws lambda invoke --function-name security-hub-lambda --cli-binary-format raw-in-base64-out --payload file://payload.json snyk-results.json && echo "LAMBDA_SUCCEDED" || echo "LAMBDA_FAILED";
           docker push ${{ secrets.DOCKER_REPO }}/devsecops:${{ vars.MAJOR }}.${{ vars.MINOR }}
         fi
         printf '[{"name":"hello-k8s","imageUri":"%s"}]' $REPOSITORY_URI:$TAG > build.json
