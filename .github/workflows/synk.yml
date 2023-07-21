@@ -51,13 +51,12 @@ jobs:
       run: |
         version=$((${{ vars.MINOR }}+1))
         echo "version=$version" >> $GITHUB_OUTPUT
-    - name: echo
-      run: echo ${{ steps.increasement.outputs.version }}
+
     # - name: login github
     #   run:  echo ${{ secrets.TOKEN_GITHUB }} | gh auth login --with-token
 
-    # - name: Set the variable
-    #   run: gh variable set MINOR ${{ steps.increasement.output.version }}
+    - name: Set the variable
+      run: gh variable set MINOR -b ${{ steps.increasement.outputs.version }}
 
     # - name: Set the variable
     #   run: echo ${{ github.token }} 
