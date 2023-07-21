@@ -49,10 +49,15 @@ jobs:
     #   run: >
     #     snyk container test ${{ secrets.DOCKER_REPO }}/devsecops:${{ vars.MAJOR }}.${{ vars.MINOR }}
     #     --file=Dockerfile --json --severity-threshold=high > snyk-results.json
+    - name: Increasement version
+      id: increasement
+      run: echo "version=$(echo $({{ MINOR }} + 1))" >> $GITHUB_OUTPUT
+    - name: login github
+      run: echo ${{ github.token }} | gh auth login --with-token
+    - name: Set the variable
+      run: gh variable set MINOR ${{ steps.increasement.output.version }} 
 
-    - name: Set the variable
-      run: echo ${GITHUB_REPOSITORY#*/}
-    - name: Set the variable
-      run: echo ${{ github.token }} 
+    # - name: Set the variable
+    #   run: echo ${{ github.token }} 
     # - name: Push to DockerHub
     #   run: docker push ${{ secrets.DOCKER_REPO }}/devsecops:${{ vars.MAJOR }}.${{ vars.MINOR }}
