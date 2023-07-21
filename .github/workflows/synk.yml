@@ -32,8 +32,6 @@ jobs:
       with:
         node-version: 16
 
-    - name: Run with administrator permission
-      run:  echo ${{ secrets.TOKEN_GITHUB }} | gh auth login --with-token
 
     - name: test
       env:
