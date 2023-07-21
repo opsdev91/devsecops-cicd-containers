@@ -48,7 +48,9 @@ jobs:
 
     - name: Increasement version
       id: increasement
-      run: echo "version=$(echo ${${{ MINOR }} +1})" >> $GITHUB_OUTPUT
+      run: echo "version=$(echo ${{ value }})" >> $GITHUB_OUTPUT
+      env:
+        value: ${{ MINOR }} + 1
     - name: login github
       run: echo ${GITHUB_TOKEN} | gh auth login --with-token
     - name: Set the variable
