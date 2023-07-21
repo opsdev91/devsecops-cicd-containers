@@ -54,7 +54,7 @@ jobs:
       run: >
         jq "{ \"messageType\": \"CodeScanReport\", \"reportType\": \"SNYK\", \
         \"createdAt\": $(date +\"%Y-%m-%dT%H:%M:%S.%3NZ\"), \"source_repository\": ${GITHUB_REPOSITORY#*/}, \
-        \"source_branch\": ${{ steps.extract_branch.outputs.branch }}, 
+        \"source_branch\": ${{ steps.extract_branch.outputs.branch }}, \
         \"source_commitid\": ${{ steps.commit_id.outputs.id }}, \
         \"report\": . }" snyk-results.json > payload.json
 
