@@ -48,14 +48,14 @@ jobs:
       id: extract_branch
     - name: Extract commit id
       shell: bash
-      run: echo "id=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_OUTPUT
+      run: echo "id=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_OUTPUT
       id: commit_id
     - name: Transfer body
       run: |
         jq "{ \"messageType\": \"CodeScanReport\", \"reportType\": \"SNYK\", \
-        \"createdAt\": $(date +\"%Y-%m-%dT%H:%M:%S.%3NZ\"), \"source_repository\":  ${{ steps.extract_branch.outputs.branch }}, \
-        \"source_branch\": ${{ steps.extract_branch.outputs.branch }}, \
-        \"source_commitid\": ${{ steps.commit_id.outputs.id }}, \
+        \"createdAt\": $(date +\"%Y-%m-%dT%H:%M:%S.%3NZ\"), \"source_repository\":  \"${GITHUB_REPOSITORY#*/}\" , \
+        \"source_branch\": \"${{ steps.extract_branch.outputs.branch }}\", \
+        \"source_commitid\": \"${{ steps.commit_id.outputs.id }}\", \
         \"report\": . }" snyk-results.json > payload.json
 
     - name: Check condition
