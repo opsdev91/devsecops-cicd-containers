@@ -18,6 +18,11 @@ data "aws_iam_policy_document" "allow_s3_policy_statement" {
     actions   = ["s3:*"]
     resources = ["arn:aws:s3:::*"]
   }
+  statement {
+    effect    = "Allow"
+    actions   = ["securityhub:*"]
+    resources = ["*"]
+  }
 }
 resource "aws_iam_role_policy_attachment" "attach_to_security_hub" {
   role       = aws_iam_role.security_hub.name
