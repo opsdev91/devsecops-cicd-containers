@@ -5,28 +5,21 @@ resource "aws_iam_policy" "allow_s3" {
   description = "A policy to allow put Object s3"
 
 
-  policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
-      {
-        "Effect" : "Allow",
-        "Action" : [
-          "logs:*"
-        ],
-        "Resource" : "arn:aws:logs:*:*:*"
-      },
-      {
-        "Effect" : "Allow",
-        "Action" : [
-          "s3:*"
-        ],
-        "Resource" : "arn:aws:s3:::*"
-      }
-    ]
-    }
-  )
+  policy = data.aws_iam_policy_document.allow_s3_policy_statement.json
 }
+data "aws_iam_policy_document" "allow_s3_policy_statement" {
+  statement {
+    effeffect = "Allow"
+    actions   = "logs:*"
+    resources = "arn:aws:logs:*:*:*"
+  }
+  statement {
+    effect  = "Allow"
+    actions = "s3:*"
 
+    resources = "arn:aws:s3:::*"
+  }
+}
 resource "aws_iam_role_policy_attachment" "attach_to_security_hub" {
   role       = aws_iam_role.security_hub.name
   policy_arn = aws_iam_policy.allow_s3.arn
