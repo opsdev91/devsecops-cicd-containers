@@ -10,14 +10,13 @@ resource "aws_iam_policy" "allow_s3" {
 data "aws_iam_policy_document" "allow_s3_policy_statement" {
   statement {
     effeffect = "Allow"
-    actions   = "logs:*"
-    resources = "arn:aws:logs:*:*:*"
+    actions   = ["logs:*"]
+    resources = ["arn:aws:logs:*:*:*"]
   }
   statement {
-    effect  = "Allow"
-    actions = "s3:*"
-
-    resources = "arn:aws:s3:::*"
+    effect    = "Allow"
+    actions   = ["s3:*"]
+    resources = ["arn:aws:s3:::*"]
   }
 }
 resource "aws_iam_role_policy_attachment" "attach_to_security_hub" {
