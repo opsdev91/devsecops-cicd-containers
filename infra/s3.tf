@@ -9,7 +9,7 @@ resource "aws_iam_policy" "allow_s3" {
 }
 data "aws_iam_policy_document" "allow_s3_policy_statement" {
   statement {
-    effeffect = "Allow"
+    effect    = "Allow"
     actions   = ["logs:*"]
     resources = ["arn:aws:logs:*:*:*"]
   }
