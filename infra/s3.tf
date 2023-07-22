@@ -33,7 +33,7 @@ resource "aws_iam_role_policy_attachment" "attach_to_security_hub" {
 }
 
 resource "aws_s3_bucket" "data_security_hub" {
-  bucket = local.bucket_name
+  bucket = "${local.resource_name_prefix}-bucket"
   acl    = "private"
 
   versioning {
