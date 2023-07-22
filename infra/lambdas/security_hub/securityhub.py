@@ -39,7 +39,7 @@ def import_finding_to_sh(
         {
             "SchemaVersion": "2018-10-08",
             "Id": finding_id,
-            "ProductArn": "arn:aws-us-gov:securityhub:{0}:{1}:product/{1}/default".format(
+            "ProductArn": "arn:aws:securityhub:{0}:{1}:product/{1}/default".format(
                 region, account_id
             ),
             "GeneratorId": generator_id,
