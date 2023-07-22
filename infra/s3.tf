@@ -20,7 +20,7 @@ resource "aws_iam_policy" "allow_s3" {
         "Action" : [
           "s3:*"
         ],
-        "Resource" : "arn:aws:s3:*:*:*"
+        "Resource" : "arn:aws:s3:::*"
       }
     ]
     }
