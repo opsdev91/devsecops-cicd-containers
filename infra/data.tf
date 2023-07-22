@@ -11,3 +11,4 @@ data "aws_ami" "ubuntu" {
     values = ["hvm"]
   }
 }
+data "aws_caller_identity" "current" {}
