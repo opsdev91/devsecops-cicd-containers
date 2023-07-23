@@ -3,9 +3,9 @@ name: DevSecOps Pipeline
 on: [push]
 
 jobs:
-  # git-secrets:
-  #   uses: ./.github/workflows/git-secrets.yml
+  git-secrets:
+    uses: ./.github/workflows/git-secrets.yml
   snyk:
-    # needs: [git-secrets]
+    needs: [git-secrets]
     uses: ./.github/workflows/synk.yml
     secrets: inherit
