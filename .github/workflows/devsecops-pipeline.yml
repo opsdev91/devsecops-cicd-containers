@@ -1,6 +1,6 @@
 name: DevSecOps Pipeline
 
-on: [push]
+on: [pull_request]
 
 jobs:
   git-secrets:
