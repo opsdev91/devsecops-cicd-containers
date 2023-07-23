@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   git-secrets:
-    uses: ./.github/workflows/git-secrets.yml
+    uses: ./.github/workflows/secrets.yml
   snyk:
     needs: [git-secrets]
     uses: ./.github/workflows/snyk.yml
