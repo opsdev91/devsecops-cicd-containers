@@ -1,5 +1,5 @@
 
-name: Git Secrets
+name: Snyk
 
 on: [workflow_call]
 
