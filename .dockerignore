@@ -3,3 +3,4 @@ infra
 ec2.pem
 .gitignore
 Dockerfile
+.talismanrc

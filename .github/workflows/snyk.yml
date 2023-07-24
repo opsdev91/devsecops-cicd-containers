@@ -1,0 +1,73 @@
+
+name: Snyk
+
+on: [workflow_call]
+
+jobs:
+
+  build:
+    runs-on: self-hosted
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        ref: develop
+
+    - name: Use Node.js 
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16
+
+    - name: Login ECR
+      run: aws ecr-public get-login-password --region us-east-1 | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin ${{ secrets.DOCKER_REPO }}
+    - name: Build the Docker image
+      run: docker build .  --tag ${{ secrets.DOCKER_REPO }}/devsecops:${{ vars.MAJOR }}.${{ vars.MINOR }}
+
+    - name: Snyk config
+      run: snyk config set api=${{ secrets.SNYK_API_SECRET }}
+
+    - name: Scan the image
+      run: >
+        snyk container test ${{ secrets.DOCKER_REPO }}/devsecops:${{ vars.MAJOR }}.${{ vars.MINOR }}
+        --file=Dockerfile --json --severity-threshold=high --json-file-output=./snyk-results.json
+      continue-on-error: true
+    - name: List
+      run: ls -al | grep snyk
+    - name: Increasement version
+      id: increasement
+      run: |
+        version=$((${{ vars.MINOR }}+1))
+        echo "version=$version" >> $GITHUB_OUTPUT
+    - name: Set the variable
+      run: gh variable set MINOR -b ${{ steps.increasement.outputs.version }}
+
+    - name: Extract branch name
+      shell: bash
+      run: echo "branch=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_OUTPUT
+      id: extract_branch
+    - name: Extract commit id
+      shell: bash
+      run: echo "id=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_OUTPUT
+      id: commit_id
+    - name: Transfer body
+      run: |
+        jq "{ \"messageType\": \"CodeScanReport\", \"reportType\": \"SNYK\", \
+        \"createdAt\": $(date +\"%Y-%m-%dT%H:%M:%S.%3NZ\"), \"source_repository\":  \"${GITHUB_REPOSITORY#*/}\" , \
+        \"source_branch\": \"${{ steps.extract_branch.outputs.branch }}\", \
+        \"source_commitid\": \"${{ steps.commit_id.outputs.id }}\", \
+        \"report\": . }" snyk-results.json > payload.json
+
+    - name: Check condition
+      run: |
+        if (grep -E 'high|critical' payload.json); then 
+          aws lambda invoke --function-name security-hub-lambda --cli-binary-format raw-in-base64-out --payload file://payload.json snyk-results.json && echo "LAMBDA_SUCCEDED" || echo "LAMBDA_FAILED";
+          echo "There are critical or high vulnerabilities.. failing the build"
+          docker push ${{ secrets.DOCKER_REPO }}/devsecops:${{ vars.MAJOR }}.${{ vars.MINOR }}
+          exit 1;
+        elif (grep -E 'medium|low' payload.json); then
+          aws lambda invoke --function-name security-hub-lambda --cli-binary-format raw-in-base64-out --payload file://payload.json snyk-results.json && echo "LAMBDA_SUCCEDED" || echo "LAMBDA_FAILED";
+          docker push ${{ secrets.DOCKER_REPO }}/devsecops:${{ vars.MAJOR }}.${{ vars.MINOR }}
+        fi
+        printf '[{"name":"hello-k8s","imageUri":"%s"}]' $REPOSITORY_URI:$TAG > build.json
+
