@@ -1,3 +1,8 @@
 .ssh
-infra
 ec2.pem
+node_modules/
+/test-results/
+terraform.tfstate
+terraform.tfstate.backup
+.terraform
+.terraform.lock.hcl
