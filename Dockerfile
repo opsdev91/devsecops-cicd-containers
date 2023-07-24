@@ -1,4 +1,4 @@
-FROM python:3.8-slim-buster
+FROM python:3.12.0b3-slim-bullseye
 ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
