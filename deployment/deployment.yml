@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: python
-        image: /devsecops:1.66
+        image: public.ecr.aws/z6c0g1m6/devsecops:1.70
         ports:
         - containerPort: 5000
