@@ -73,7 +73,7 @@ jobs:
       - name: Removing the container
         run: docker rm -f $(docker ps -a -q)
 
-      #   - name: Check condition
+      #   - name: Check the condition
       #     run: >
       #       if [ ${{ steps.scan.outputs.high_alerts }} != 0 ] || [ ${{ steps.scan.outputs.medium_alerts }} != 0 ];
       #       then echo "there are high or medium alerts.. failing the build" && exit 1; else exit 0; fi
