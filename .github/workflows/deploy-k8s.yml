@@ -43,7 +43,11 @@ jobs:
                 image: ${{ secrets.DOCKER_REPO }}/devsecops:${{ vars.MAJOR }}.${{ vars.MINOR }}
                 ports:
                 - containerPort: 5000" > deployment.yml  
-
+    - name: Commit
+      uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: "Change Deployment"
+        
     - name: Increasement version
       id: increasement
       run: |
