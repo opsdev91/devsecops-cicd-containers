@@ -55,15 +55,6 @@ jobs:
         --file=Dockerfile --json --severity-threshold=high --json-file-output=./snyk-results.json
       continue-on-error: true
 
-    - name: Increasement version
-      id: increasement
-      run: |
-        version=$((${{ vars.MINOR }}+1))
-        echo "version=$version" >> $GITHUB_OUTPUT
-
-    - name: Set the variable
-      run: gh variable set MINOR -b ${{ steps.increasement.outputs.version }}
-
     - name: Extract branch name
       shell: bash
       run: echo "branch=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_OUTPUT
