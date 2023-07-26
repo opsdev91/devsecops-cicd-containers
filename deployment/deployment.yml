@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: python
-        image: /devsecops:1.62
+        image: /devsecops:1.65
         ports:
         - containerPort: 5000
